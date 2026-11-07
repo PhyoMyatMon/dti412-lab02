@@ -1,0 +1,41 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}Home - DTI CoursePortal{% endblock %}
+
+{% block content %}
+  <section class="p-4 p-md-5 mb-4 bg-white rounded-3 shadow-sm border">
+    <div class="py-2">
+      <p class="text-uppercase text-primary fw-semibold small mb-2">Department of Information Technology</p>
+      <h1 class="display-5 fw-bold text-primary">Welcome to DTI CoursePortal</h1>
+      <p class="col-md-10 fs-5 text-secondary mt-3">
+        Explore IT undergraduate courses, review syllabus details, and send questions to course instructors.
+      </p>
+      <hr class="my-4">
+      <div class="row text-center mt-4">
+        <div class="col-md-6 mb-3">
+          <div class="card border-primary h-100">
+            <div class="card-body d-flex flex-column justify-content-center">
+              <h2 class="card-title text-primary display-6 fw-bold">{{ total_courses }}</h2>
+              <p class="card-text text-muted fw-semibold">Active Courses Offered</p>
+              <div>
+                <a href="{% url 'catalog:course_list' %}" class="btn btn-outline-primary mt-2">Browse All Courses</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="card border-success h-100">
+            <div class="card-body d-flex flex-column justify-content-center">
+              <span class="badge bg-success w-auto mx-auto mb-2 px-3 py-2">Featured Subject</span>
+              <h3 class="h5 card-title fw-bold text-dark">{{ featured_course.code }}: {{ featured_course.title }}</h3>
+              <p class="card-text text-muted small mt-2">{{ featured_course.description }}</p>
+              <div>
+                <a href="{% url 'catalog:course_detail' featured_course.id %}" class="btn btn-success mt-2">View Full Syllabus</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

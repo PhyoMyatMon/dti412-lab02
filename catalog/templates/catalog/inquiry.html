@@ -1,0 +1,97 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}Submit Inquiry - DTI CoursePortal{% endblock %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <section class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white py-3">
+          <h1 class="h4 mb-0 fw-bold">Course Inquiry Form</h1>
+        </div>
+        <div class="card-body p-4">
+          {% if errors %}
+            <div class="alert alert-danger" role="alert" aria-live="polite">
+              <h2 class="h6 fw-bold mb-2">Form Submission Errors:</h2>
+              <ul class="mb-0">
+                {% for error in errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+
+          {% if submitted_data %}
+            <div class="alert alert-success" role="status" aria-live="polite">
+              <h2 class="h5 alert-heading fw-bold">Inquiry Processed Successfully!</h2>
+              <p class="mb-1">
+                Thank you, <strong>{{ submitted_data.student_name }}</strong>. Your inquiry has been submitted.
+              </p>
+            </div>
+          {% endif %}
+
+          <form method="post" action="{% url 'catalog:inquiry' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="student_name" class="form-label">Full Name <span class="text-danger">*</span></label>
+              <input
+                type="text"
+                class="form-control"
+                id="student_name"
+                name="student_name"
+                value="{{ form_data.student_name }}"
+                required
+                autocomplete="name"
+                placeholder="e.g. Jane Doe"
+              >
+            </div>
+
+            <div class="mb-3">
+              <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                value="{{ form_data.email }}"
+                required
+                autocomplete="email"
+                placeholder="student@example.com"
+              >
+            </div>
+
+            <div class="mb-3">
+              <label for="course_code" class="form-label">Course</label>
+              <select class="form-select" id="course_code" name="course_code">
+                <option value="">General inquiry</option>
+                {% for course in courses %}
+                  <option
+                    value="{{ course.code }}"
+                    {% if form_data.course_code == course.code or request.GET.course == course.code %}selected{% endif %}
+                  >
+                    {{ course.code }} — {{ course.title }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="message" class="form-label">Inquiry Message <span class="text-danger">*</span></label>
+              <textarea
+                class="form-control"
+                id="message"
+                name="message"
+                rows="4"
+                required
+                placeholder="Ask about prerequisites, schedules, or grading..."
+              >{{ form_data.message }}</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary px-4">Submit Inquiry</button>
+            <a href="{% url 'catalog:home' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
+          </form>
+        </div>
+      </section>
+    </div>
+  </div>
+{% endblock %}
